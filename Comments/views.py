@@ -10,7 +10,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
     serializer_class = CommentSerializer
-
+# hllo wrld
     def create(self, request):
         data = request.data
         book_id = data.get('book_id')
