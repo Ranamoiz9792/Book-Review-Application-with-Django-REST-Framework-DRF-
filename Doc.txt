@@ -1,0 +1,10 @@
+django-admin startproject book_review
+django-admin startapp Authentication 
+django-admin startapp Books 
+python -m venv myenv
+myenv/scripts/activate
+pip install django djangorestframework
+#pip install djangorestframework-simplejwt
+#pip install -r requirements.txt
+pip install python-dotenv
+pip install django-redis
