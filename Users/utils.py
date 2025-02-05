@@ -1,8 +1,8 @@
-from django.conf import settings
-import jwt
-import smtplib
-import random
 import datetime
+import jwt
+import random
+import smtplib
+from django.conf import settings
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -11,7 +11,7 @@ def generate_jwt_token(useremail):
     payload = {
         'email': useremail,
         
-        'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=6),
+        'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1),
     }
     token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
     return token

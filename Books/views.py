@@ -7,9 +7,15 @@ from .serializer import BookSerializer
 from book_review.utils import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
+class BookPagination(PageNumberPagination):
+    page_size = 10  
+    page_size_query_param = 'page_size'
+    max_page_size = 50
 class BookViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
+    pagination_class = BookPagination
     
     def create(self, request):
         data=request.data
@@ -28,14 +34,56 @@ class BookViewSet(viewsets.ModelViewSet):
             "data" : serializer.data,
         })
 
+    # def list(self, request):
+    #     try:
+    #         books = Book.objects.all()
+    #         if books:
+    #             return Response({
+    #                 "message" : "Books Found",
+    #                 "Books" : [
+    #                     {
+    #                      'id': book.id,
+    #                      'title': book.title,
+    #                      'description':book.description,
+    #                     'author': book.author,
+    #                     'published_by': book.published_by.username,
+    #                     'cover_image': book.cover_image.url,
+    #                     'created_at' : book.created_at,
+
+    #                 }
+    #                 for book in books
+    #             ]
+    #             })
+            
+    #     except Book.DoesNotExist:
+    #         return Response({
+    #             "message" : "No books found",
+    #         })
+    
+
     def list(self, request):
         try:
             books = Book.objects.all()
-            serializer = BookSerializer(books, many=True)
-            return Response({
-            "data" :  serializer.data,
+            paginator = self.pagination_class()
+            paginated_books = paginator.paginate_queryset(books, request)
+            if paginated_books:
+                return paginator.get_paginated_response({
+                    "message" : "Books Found",
+                    "Books" : [
+                        {
+                         'id': book.id,
+                         'title': book.title,
+                         'description':book.description,
+                        'author': book.author,
+                        'published_by': book.published_by.username,
+                        'cover_image': book.cover_image.url,
+                        'created_at' : book.created_at,
 
+                    }
+                   for book in paginated_books
+                ]
                 })
+            
         except Book.DoesNotExist:
             return Response({
                 "message" : "No books found",

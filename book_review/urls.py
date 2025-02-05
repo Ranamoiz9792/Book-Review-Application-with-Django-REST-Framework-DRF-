@@ -22,6 +22,7 @@ urlpatterns = [
     path('', include('Users.urls')),
     path('', include('Books.urls')),
     path('', include('Comments.urls')),
+    path('', include('Reviews.urls')),
 
    
 ]
