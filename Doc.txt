@@ -8,3 +8,5 @@ pip install django djangorestframework
 #pip install -r requirements.txt
 pip install python-dotenv
 pip install django-redis
+pip install channels channels-redis
+pip install daphne
